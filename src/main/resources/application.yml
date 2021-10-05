@@ -1,0 +1,57 @@
+jwt:
+ secret: 'Omolola is the love of my life.ABCDefg123'
+  
+server:
+ port: 8082
+# error:
+#  path: 'This page does not exist.'
+# error: 
+#  whitelabel: 
+#   enabled: false
+
+logging:
+ level:
+  root: info
+ file:
+  path: logs
+
+
+spring:
+ datasource:
+  url: jdbc:mariadb://localhost:3306/supportportal
+  password: password
+  username: root
+ jpa: 
+  show-sql: true
+  hibernate:
+   ddl-auto: update
+  properties: 
+   hibernate: 
+    dialect: org.hibernate.dialect.MariaDBDialect
+ mail:
+  properties:
+   mail:
+    smtp:
+     connectiontimeout: 100000
+     writetimeout: 100000
+  default-encoding: UTF-8
+  port: 2525
+  username: 6de7c8e7b17655
+  password: fd5346e2206c67
+  protocol: smtp
+  host: smtp.mailtrap.io
+  
+
+# web:
+#  resources:
+#   add-mappings: false
+# mvc:
+#    throw-exception-if-no-handler-found: true
+
+
+
+
+
+
+
+
