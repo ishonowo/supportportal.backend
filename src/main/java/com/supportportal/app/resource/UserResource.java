@@ -97,13 +97,13 @@ public class UserResource extends ExceptionHandling{
 	
 	@PutMapping("/update")
 	public ResponseEntity<User> updateUser(@RequestParam("currentUsername") String currentUsername,@RequestParam("newFirstName") String newFirstName,
-			@RequestParam("newLastname") String newLastname, @RequestParam("newUsername") String newUsername,
+			@RequestParam("newLastName") String newLastName, @RequestParam("newUsername") String newUsername,
 			@RequestParam("newEmail") String newEmail, @RequestParam("newRole") String newRole,
 			@RequestParam("isNonLocked") boolean isNonLocked, @RequestParam("isActive") boolean isActive,
 			@RequestParam(value="profileImage", required=false ) MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException{
 
 		
-		User updatedUser = userService.updateUser(currentUsername, newFirstName, newLastname, newUsername,
+		User updatedUser = userService.updateUser(currentUsername, newFirstName, newLastName, newUsername,
 				newEmail, newRole, isNonLocked, isActive, profileImage);
 		return new ResponseEntity<>(updatedUser, OK);
 		
@@ -115,7 +115,7 @@ public class UserResource extends ExceptionHandling{
 		return new ResponseEntity<>(user, OK);
 	}
 
-	@GetMapping("/find/{email}")
+	@GetMapping("/findEmail/{email}")
 	public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email){
 		User user= userService.findUserByEmail(email);
 		return new ResponseEntity<>(user, OK);

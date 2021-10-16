@@ -214,6 +214,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 		
 		userRepo.save(user);
 		saveProfileImage(user, profileImage);
+		LOGGER.info("The new user password is "+password);
 		
 		return user;
 		
@@ -222,13 +223,14 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	private void saveProfileImage(User user, MultipartFile profileImage) throws IOException {
 		if (profileImage != null) {
 			Path userFolder= Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
-			if(Files.exists(userFolder)) {
+			if(!Files.exists(userFolder)) {
 				Files.createDirectories(userFolder);
 				LOGGER.info(DIRECTORY_CREATED + userFolder);
 			}
 			Files.deleteIfExists(Paths.get(userFolder + user.getUsername()+EXTENSION));
 			Files.copy(profileImage.getInputStream(), userFolder.resolve(user.getUsername()+EXTENSION),
 					REPLACE_EXISTING);
+			//Files.createFile
 			user.setProfileImageUrl(setProfileImageUri(user.getUsername()));
 			userRepo.save(user);
 			LOGGER.info(FILE_SAVED_IN_FILE_SYSTEM + profileImage.getOriginalFilename());
@@ -236,7 +238,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	}
 
 	private String setProfileImageUri(String username) {
-		return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + username
+		return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH +"/"+ username
 				+ "/" + username + EXTENSION).toUriString() ;
 	}
 
@@ -250,17 +252,17 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 	}
 
 	@Override
-	public User updateUser(String currentUsername, String newFirstName, String newLastname, String newUsername,
+	public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername,
 			String newEmail, String newRole, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException{
 
 		User currentUser= validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);	
 		
 		currentUser.setFirstName(newFirstName);
-		currentUser.setLastName(newLastname);
+		currentUser.setLastName(newLastName);
 		currentUser.setUsername(newUsername);
 		currentUser.setEmail(newEmail);
-		currentUser.setActive(true);
-		currentUser.setNotLocked(true);
+		currentUser.setActive(isActive);
+		currentUser.setNotLocked(isNonLocked);
 		currentUser.setRole(getRoleEnumName(newRole).name());
 		currentUser.setAuthorities(getRoleEnumName(newRole).getAuthorities());
 		
